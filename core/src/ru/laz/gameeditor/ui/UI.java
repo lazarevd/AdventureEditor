@@ -39,7 +39,7 @@ import ru.laz.gameeditor.ui.tools.ToolBox;
 import ru.laz.gameeditor.world.World;
 
 public class UI {
-	
+	 
 	public final static int SCREENW = 1440;
 	public final static int SCREENH = 480;
 	
