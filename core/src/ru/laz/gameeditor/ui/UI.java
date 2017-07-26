@@ -41,7 +41,7 @@ import ru.laz.gameeditor.world.World;
 public class UI {
 	
 	public final static int SCREENW = 1440;
-	public final static int SCREENH = 512;
+	public final static int SCREENH = 480;
 	
 	
 	private TextButtonStyle textButtonStyle;
@@ -360,6 +360,8 @@ public class UI {
 			curTool = null;
 		}
 		drawObjects();
+		//TODO Test cursor position
+		RenderShapes.drawPoint(UI.getCursor(), 3, Colour.WHITE);
 		movePolygonVertex();
 		moveNode();
 		
@@ -367,6 +369,7 @@ public class UI {
 	
 	
 	public void movePolygonVertex() {
+
 		Vector2 touchPos = new Vector2();
 	      touchPos.set(Gdx.input.getX(), Gdx.input.getY());
 	      if(Gdx.input.isTouched() && MOVEPOLY) {  
@@ -409,12 +412,15 @@ public class UI {
 		    			  curPolygon = pol;
 			    		  nodDistance = curDistance;
 			    		  moveVertex = curVertex;
+
 			    		  }
 	    		  movePolygon = curPolygon;
 			      }
 	     
 			      if (movePolygon.getDistanceToVertex(moveVertex, UI.getCursor().x, UI.getCursor().y) < 20) {
-			    	  movePolygon.setVertexXY(moveVertex,UI.getCursor().x, UI.getCursor().y);}   
+			    	  movePolygon.setVertexXY(moveVertex,UI.getCursor().x, UI.getCursor().y);
+					  RenderShapes.drawPoint(UI.getCursor(), 5, Colour.RED);
+			      }
 }
  
 	      }
