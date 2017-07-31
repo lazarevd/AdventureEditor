@@ -27,7 +27,9 @@ public class Node {
 	
 	
 	
-	private Node(){}//empty constructor for serialization
+	private Node(){
+		this.neighbours = new Array<String>();
+	}//empty constructor for serialization
 	
 	public Node(float x2, float y2) {
 		nodeType = NodeType.STANDART;
