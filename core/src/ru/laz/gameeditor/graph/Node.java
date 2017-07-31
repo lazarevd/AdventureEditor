@@ -27,7 +27,7 @@ public class Node {
 	
 	
 	
-	private Node(){}
+	private Node(){}//empty constructor for serialization
 	
 	public Node(float x2, float y2) {
 		nodeType = NodeType.STANDART;

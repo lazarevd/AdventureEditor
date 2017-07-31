@@ -14,7 +14,8 @@ public class Edge {
 	
 	
 	private Array<String> nodesToLink;
-	
+
+	private Edge() {}//empty constructor for serialization
 	
 	public Edge(String n1, String n2) {
 		if (n1.equals(n2)) {

@@ -1,6 +1,10 @@
 package ru.laz.gameeditor.graph;
 
-import java.util.Arrays;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -10,17 +14,12 @@ import ru.laz.gameeditor.render.RenderShapes;
 import ru.laz.gameeditor.render.RenderShapes.Colour;
 import ru.laz.gameeditor.world.World;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-
 public class Polygon4 extends Polygon {
 	
 	
-	private Array<String> pointsOnEdges;
-	public enum DrawStat {NORMAL, SELECTED, HIGHLIGHT}; 
-	public DrawStat drawStat;
+	private transient Array<String> pointsOnEdges;
+	public enum DrawStat {NORMAL, SELECTED, HIGHLIGHT};
+	public transient DrawStat drawStat;
 	
 	
 	public Polygon4() {

@@ -1,22 +1,23 @@
 package ru.laz.gameeditor.graph;
 
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import ru.laz.gameeditor.world.World;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-
 public class PointOnEdge {
 	
-	private Vector2 position;
+	private transient Vector2 position;
 	private int parentEdge;
 	private float edgePosition;
 	private String parentPoly;
-	private String childNode;
-	
+	private transient String childNode;
+
+	private PointOnEdge() {}
+
 	public PointOnEdge(String poly, int parentEdge, float k) {
 		this.parentEdge = parentEdge;
 		this.position = new Vector2();

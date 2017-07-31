@@ -8,10 +8,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ru.laz.gameeditor.dataexchange.EdgeSource;
 import ru.laz.gameeditor.dataexchange.GraphSource;
-import ru.laz.gameeditor.dataexchange.POESource;
-import ru.laz.gameeditor.dataexchange.PolySource;
 import ru.laz.gameeditor.world.World;
 
 public class Graph {//Use generic for key (id) of elements (node, pole etc.)
@@ -104,23 +101,17 @@ public class Graph {//Use generic for key (id) of elements (node, pole etc.)
 			}
 		}
 
-
-
 		for (Entry<String,Edge> ed : edges.entrySet()) {
 			Gdx.app.log("ed", ed.getKey());
-			graphSource.getEdgesSource().put(ed.getKey(), new EdgeSource(ed.getValue().getNodes().get(0), ed.getValue().getNodes().get(1)));
+			graphSource.getEdgesSource().put(ed.getKey(), ed.getValue());
 		}
 		
 		for (Entry<String,Polygon4> pl : polygons.entrySet()) {
-			
-			PolySource polySrc = new PolySource(pl.getValue().getVertices());
-			
-			graphSource.getPolysSource().put(pl.getKey(), polySrc);	
+			graphSource.getPolysSource().put(pl.getKey(), pl.getValue());
 		}
 		
 		for (Entry<String, PointOnEdge> poe : poes.entrySet()) {
-			Gdx.app.log("poe", poe.getValue().getParentPolygon());
-			graphSource.getPOESource().put(poe.getKey(), new POESource(poe.getValue().getParentEdge(), poe.getValue().getParentPolygon(), poe.getValue().getEdgePosition()));
+			graphSource.getPOESource().put(poe.getKey(), poe.getValue());
 		}
 
 	}
@@ -142,17 +133,16 @@ public class Graph {//Use generic for key (id) of elements (node, pole etc.)
 		Gdx.app.log("ADDED NODES ", "");
 
 
-		for (Entry<String,EdgeSource> ed : graphSource.edges.entrySet()) {
-			addEdge(ed.getKey(), new Edge(ed.getValue().node1, ed.getValue().node2));
+		for (Entry<String,Edge> ed : graphSource.edges.entrySet()) {
+			addEdge(ed.getKey(), ed.getValue());
 		}
 			
-		for (Entry<String,PolySource> ps : graphSource.polys.entrySet()) {
-			Polygon4 polygon = new Polygon4(ps.getValue().vertices);	
-				addPolygon(ps.getKey(), polygon);		
+		for (Entry<String,Polygon4> ps : graphSource.polys.entrySet()) {
+				addPolygon(ps.getKey(), ps.getValue());
 		}
 		
-		for(Entry<String, POESource> poeSrcId : graphSource.poes.entrySet()) { //Делать всегда отдельным циклом каждый список класса
-			polygons.get(poeSrcId.getValue().parentPoly).addPointOnEdge(poeSrcId.getValue().parentEdge, poeSrcId.getValue().position, poeSrcId.getKey());
+		for(Entry<String, PointOnEdge> poeSrcId : graphSource.poes.entrySet()) { //Делать всегда отдельным циклом каждый список класса
+			polygons.get(poeSrcId.getValue().getParentPolygon()).addPointOnEdge(poeSrcId.getValue().getParentEdge(), poeSrcId.getValue().getEdgePosition(), poeSrcId.getKey());
 		Gdx.app.log("Adding poe", poeSrcId.getKey());
 		}		
 
