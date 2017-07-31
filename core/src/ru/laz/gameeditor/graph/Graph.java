@@ -1,5 +1,7 @@
 package ru.laz.gameeditor.graph;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -8,17 +10,9 @@ import java.util.regex.Pattern;
 
 import ru.laz.gameeditor.dataexchange.EdgeSource;
 import ru.laz.gameeditor.dataexchange.GraphSource;
-import ru.laz.gameeditor.dataexchange.NodeSource;
 import ru.laz.gameeditor.dataexchange.POESource;
 import ru.laz.gameeditor.dataexchange.PolySource;
-import ru.laz.gameeditor.graph.Node.NodeType;
 import ru.laz.gameeditor.world.World;
-
-
-
-
-
-import com.badlogic.gdx.Gdx;
 
 public class Graph {//Use generic for key (id) of elements (node, pole etc.)
 	
@@ -91,15 +85,27 @@ public class Graph {//Use generic for key (id) of elements (node, pole etc.)
 		
 		
 		
-		
+/*
 		for (Entry<String,Node> nd : nodes.entrySet()) {
 			if (!nd.getValue().isStart() && !nd.getValue().isFinish()) //dont export start/finish
-				if(nd.getValue().nodeType == NodeType.STANDART) {
-				graphSource.getNodesSource().put(nd.getKey(), new NodeSource(nd.getValue().getX(), nd.getValue().getY(), 1));//standart
-				} else if(nd.getValue().nodeType == NodeType.POE) {
-				graphSource.getNodesSource().put(nd.getKey(), new NodeSource(nd.getValue().getX(), nd.getValue().getY(), 2, nd.getValue().getListOfPOE()));//poe
-				}	
-		
+				if (nd.getValue().nodeType == NodeType.STANDART) {
+					graphSource.getNodesSource().put(nd.getKey(), new NodeSource(nd.getValue().getX(), nd.getValue().getY(), 1));//standart
+				} else if (nd.getValue().nodeType == NodeType.POE) {
+					graphSource.getNodesSource().put(nd.getKey(), new NodeSource(nd.getValue().getX(), nd.getValue().getY(), 2, nd.getValue().getListOfPOE()));//poe
+				}
+		}
+*/
+
+
+		for (Entry<String,Node> nd : nodes.entrySet()) {
+			if (!nd.getValue().isStart() && !nd.getValue().isFinish()) //dont export start/finish
+			{
+					graphSource.getNodesSource().put(nd.getKey(), nd.getValue());//standart
+			}
+		}
+
+
+
 		for (Entry<String,Edge> ed : edges.entrySet()) {
 			Gdx.app.log("ed", ed.getKey());
 			graphSource.getEdgesSource().put(ed.getKey(), new EdgeSource(ed.getValue().getNodes().get(0), ed.getValue().getNodes().get(1)));
@@ -116,23 +122,26 @@ public class Graph {//Use generic for key (id) of elements (node, pole etc.)
 			Gdx.app.log("poe", poe.getValue().getParentPolygon());
 			graphSource.getPOESource().put(poe.getKey(), new POESource(poe.getValue().getParentEdge(), poe.getValue().getParentPolygon(), poe.getValue().getEdgePosition()));
 		}
-	}
+
 	}
 	
 	public void loadGraph() {
-		
-		
+
+		Gdx.app.log("S NODES ", "");
 		edges.clear();
 		nodes.clear();
 		polygons.clear();
 		poes.clear();
 		
-		
-		for (Entry<String,NodeSource> ns : graphSource.nodes.entrySet()) {
-			if (ns.getValue().nodeType == 1)//Standart nodes
-			addNode(ns.getKey(), new Node(ns.getValue().x, ns.getValue().y));
+
+		for (Entry<String,Node> ns : graphSource.nodes.entrySet()) {
+			if (ns.getValue().nodeType == Node.NodeType.STANDART)//Standart nodes
+			addNode(ns.getKey(), ns.getValue());
 		}
-		
+
+		Gdx.app.log("ADDED NODES ", "");
+
+
 		for (Entry<String,EdgeSource> ed : graphSource.edges.entrySet()) {
 			addEdge(ed.getKey(), new Edge(ed.getValue().node1, ed.getValue().node2));
 		}
@@ -146,12 +155,13 @@ public class Graph {//Use generic for key (id) of elements (node, pole etc.)
 			polygons.get(poeSrcId.getValue().parentPoly).addPointOnEdge(poeSrcId.getValue().parentEdge, poeSrcId.getValue().position, poeSrcId.getKey());
 		Gdx.app.log("Adding poe", poeSrcId.getKey());
 		}		
-				
-		for (Entry<String,NodeSource> ns : graphSource.nodes.entrySet()) {
-			if (ns.getValue().nodeType == 2)//POE nodes
-				addNode(ns.getKey(), new Node(ns.getValue().getPOEs()));
+
+
+		for (Entry<String,Node> ns : graphSource.nodes.entrySet()) {
+			if (ns.getValue().nodeType == Node.NodeType.POE)//POE nodes
+				addNode(ns.getKey(), ns.getValue());
 			}		
-			
+
 		
 		
 		}
@@ -223,10 +233,8 @@ public class Graph {//Use generic for key (id) of elements (node, pole etc.)
 		return this.edges;
 	}
 	
-	public void addNode(String name, Node node) {		
-			
+	public void addNode(String name, Node node) {
 		this.nodes.put(name, node);
-
 	}
 	
 	

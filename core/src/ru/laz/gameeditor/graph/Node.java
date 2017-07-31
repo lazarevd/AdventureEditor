@@ -1,37 +1,33 @@
 package ru.laz.gameeditor.graph;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import ru.laz.gameeditor.render.RenderShapes.Colour;
-import ru.laz.gameeditor.world.World;
-
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import ru.laz.gameeditor.render.RenderShapes.Colour;
+import ru.laz.gameeditor.world.World;
+
 public class Node {
 	
 	private Array<String> poeList;
 	protected NodeType nodeType;
-	private boolean start, finish = false;
+	private transient boolean start, finish = false;
 	private float x, y;
-	private String parentNode;
-	private Array<String> neighbours;
-	private int G, H; //G - from start cost, H - to finish heuristic cost.
-	public Colour colour;
+	private transient String parentNode;
+	private transient Array<String> neighbours;
+	private transient int G, H; //G - from start cost, H - to finish heuristic cost.
+	public transient Colour colour;
 	
 	
 	enum NodeType {STANDART, POE};
 	
 	
 	
-	
+	private Node(){}
 	
 	public Node(float x2, float y2) {
 		nodeType = NodeType.STANDART;

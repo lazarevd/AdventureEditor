@@ -3,18 +3,20 @@ package ru.laz.gameeditor.dataexchange;
 
 import java.util.HashMap;
 
+import ru.laz.gameeditor.graph.Node;
+
 
 public class GraphSource {
 	
 
-	public HashMap<String, NodeSource> nodes;
+	public HashMap<String, Node> nodes;
 	public HashMap<String, POESource> poes;
 	public HashMap<String, EdgeSource> edges;
 	public HashMap<String, PolySource> polys;
 
 	
 	public GraphSource() {
-		nodes = new HashMap<String, NodeSource>();
+		nodes = new HashMap<String, Node>();
 		edges = new HashMap<String, EdgeSource>();
 		polys = new HashMap<String, PolySource>();
 		poes = new HashMap<String, POESource>();
@@ -26,7 +28,7 @@ public class GraphSource {
 		
 	}
 	
-	public  HashMap<String, NodeSource> getNodesSource() {
+	public  HashMap<String, Node> getNodesSource() {
 		return nodes;
 	}
 	
@@ -47,7 +49,7 @@ public class GraphSource {
 	
 	
 	public void addNode(float x, float y, String name) {
-		nodes.put(name, new NodeSource(x,y,1));
+		nodes.put(name, new Node(x,y,1));
 	}
 	
 	
