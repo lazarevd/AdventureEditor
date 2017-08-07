@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class MathGame {
 
-	
+
 	public static Vector2 lineToVector(Vector2[] line) {
 		Vector2 res = new Vector2(line[1].x-line[0].x, line[1].y - line[0].y);
 		

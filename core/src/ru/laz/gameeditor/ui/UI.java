@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -34,6 +35,7 @@ import ru.laz.gameeditor.ui.tools.ConnectPolygons;
 import ru.laz.gameeditor.ui.tools.ConnectPolygons2;
 import ru.laz.gameeditor.ui.tools.DeleteEdge;
 import ru.laz.gameeditor.ui.tools.DeleteNode;
+import ru.laz.gameeditor.ui.tools.SetDistance;
 import ru.laz.gameeditor.ui.tools.Tool;
 import ru.laz.gameeditor.ui.tools.ToolBox;
 import ru.laz.gameeditor.world.World;
@@ -62,7 +64,8 @@ public class UI {
 	private ToolDisplayStatus toolDisplayStatus = ToolDisplayStatus.NORMAL;
 	
 	public enum ToolDisplayStatus {HOVERPOLYGON, HOVERPOE, HOVERNODE, HOVEREDGE, NORMAL};
-	
+
+	TextField textDialogField = null;
 	
 	private UI(Stage stg) {
 		world = World.getWorld();
@@ -286,7 +289,22 @@ public class UI {
 		    
 		    }
 		});
-		
+
+
+		Button but14 = createButton("Set far");
+		but14.addListener(new ChangeListener() {
+			public void changed (ChangeEvent event, Actor actor) {
+				NODE = true;
+				ToolBox.stopTool(curTool);
+				if(curTool == null) {
+					curTool = new SetDistance();
+					curTool.prepare();
+				} else {
+					curTool = null;
+				}
+				//TODO
+			}
+		});
 		
 	
 		
@@ -312,6 +330,8 @@ public class UI {
         mainTable.add(but5).maxWidth(60);
         mainTable.row();
         mainTable.add(but6).maxWidth(60);
+		mainTable.row();
+		mainTable.add(but14).maxWidth(60);
         mainTable.row();
         mainTable.add(but8).maxWidth(60);
         mainTable.row();
@@ -360,7 +380,6 @@ public class UI {
 			curTool = null;
 		}
 		drawObjects();
-		//TODO Test cursor position
 		RenderShapes.drawPoint(UI.getCursor(), 3, Colour.WHITE);
 		movePolygonVertex();
 		moveNode();
@@ -428,17 +447,12 @@ public class UI {
 		
 	}
 	
-	
-	
 
-	
 	
 	public void moveNode() {
 		 if(Gdx.input.isTouched()) {
-			   
 		      Vector2 touchPos = new Vector2();
 		      touchPos.set(Gdx.input.getX(), Gdx.input.getY());
-		   
 		      if (NODE == true)    {
 		   Node moveNode;
 		   Array<Node> nodes = new Array<Node>();
@@ -452,17 +466,13 @@ public class UI {
 		   
 		   
 		   if (nodes.size > 0) {
-		   
 		      moveNode = nodes.get(nodes.size-1);
-		      
 		      for (Node nod : nodes) {
 		    	  if (nod.getDistance(touchPos.x, UI.getCursor().y) < moveNode.getDistance(UI.getCursor().x, UI.getCursor().y)) {
 		    		  moveNode = nod;
 		    	  }
 		      }
-		      
 		      			      if (moveNode.getDistance(UI.getCursor().x, UI.getCursor().y) < 20) {
-		    	  
 		    	  moveNode.setX(UI.getCursor().x);
 		    	  moveNode.setY(UI.getCursor().y);
 		      }
@@ -478,7 +488,29 @@ public class UI {
 	   }
 	}
 	
-	
+
+
+	public boolean showNodeDistanceDialog(Node node, final SetDistance setDistTool) {
+		Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+		textDialogField = new TextField("",skin);
+		stage.addActor(textDialogField);
+		textDialogField.setTextFieldListener(new TextField.TextFieldListener() {
+			@Override
+			public void keyTyped(TextField textField, char ch) {
+				setDistTool.setDialogBuffer(textField.getText());
+				System.out.println("typed " + ch);
+				if(ch == '\r') {setDistTool.setFinishEnter(true);}
+			}
+		});
+	return true;
+	}
+
+	public void hideNodeDistanceDialog() {
+		if(textDialogField != null) {
+			stage.getActors().removeValue(textDialogField,true);
+			textDialogField = null;
+		}
+	}
 	
 	
 	private void drawObjects() {
@@ -522,11 +554,7 @@ public class UI {
 		
 		
 	}
-	
-	
 
-	
-	
 	public static UI createUI(Stage stg) {
 		if (ui ==null) {
 			ui = new UI(stg);
