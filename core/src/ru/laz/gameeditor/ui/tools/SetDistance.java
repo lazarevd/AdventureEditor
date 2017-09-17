@@ -42,12 +42,14 @@ public class SetDistance implements Tool  {
 
     @Override
     public void select() {
+        UI.getUI().hideNodeDistanceDialog();
         Gdx.app.log("Select ", dialogBuffer);
         Vector2 inputXY = new Vector2(UI.getCursor().x,UI.getCursor().y);
         if(setSelectedNode(inputXY)) {
             UI.getUI().showNodeDistanceDialog(workNode, this);
             toolStat = ToolStatus.PROCESSING;
             UI.getUI().setToolDisplayStatus(ToolDisplayStatus.NORMAL);
+            finishEnter = false;
         }
     }
 
@@ -65,7 +67,7 @@ public class SetDistance implements Tool  {
                     toolStat = ToolStatus.FINISHED;
                 }
                 workNode.setCamDistance(dist);
-                toolStat = ToolStatus.FINISHED;
+                prepare();
             }
         } else {
             toolStat = ToolStatus.FINISHED;

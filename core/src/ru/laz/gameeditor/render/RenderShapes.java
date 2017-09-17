@@ -43,6 +43,7 @@ public class RenderShapes {
 		shapeRenderer = new ShapeRenderer();
 	    spriteBatch = new SpriteBatch();
 	    font = new BitmapFont();
+		font.getData().setScale(0.9f);
 	    backgroungSprite = new Sprite();
 	}
 	
@@ -200,7 +201,8 @@ public class RenderShapes {
 		
 	    spriteBatch.begin();
 	    try {
-	    font.draw(spriteBatch, node.getThisId().toString(), node.getX(), node.getY() - 10);
+	    font.draw(spriteBatch, node.getThisId().toString(), node.getX()-10, node.getY() - 10);
+		font.draw(spriteBatch, node.getCamDistance()+"", node.getX()-10, node.getY() + 20);
 	    } catch (NullPointerException nex) {//Catch exception when node has no name.
 	    font.draw(spriteBatch, "???", node.getX(), node.getY() - 10);	
 	    }
