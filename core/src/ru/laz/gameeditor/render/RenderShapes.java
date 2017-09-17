@@ -1,6 +1,13 @@
 package ru.laz.gameeditor.render;
 
-import java.util.HashMap;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 import ru.laz.gameeditor.graph.Edge;
 import ru.laz.gameeditor.graph.Node;
@@ -11,17 +18,12 @@ import ru.laz.gameeditor.ui.UI;
 import ru.laz.gameeditor.ui.UI.ToolDisplayStatus;
 import ru.laz.gameeditor.world.World;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-
 public class RenderShapes {
-	
+
+
+	public static int BACKGROUND_HEIGHT = 540;
+	public static int BACKGROUND_WIDTH = 1240;
+
 	static ShapeRenderer shapeRenderer;
 	static boolean edgeOn, polyOn, nodeOn;
     static SpriteBatch spriteBatch;
@@ -50,7 +52,11 @@ public class RenderShapes {
 	
 	public void setBackgroundSprite(Texture tex) {
 		this.backgroungSprite = new Sprite(tex);
-		this.backgroungSprite.setSize(2048, 512);
+
+
+
+
+		this.backgroungSprite.setSize(BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 	}
 	
 	public static void drawPoint(Vector2 xy, int r, Colour colour) {
@@ -167,7 +173,7 @@ public class RenderShapes {
 		node.updateStatus();
 		
 		
-		if(UI.getUI().getToolDisplayStatus() == ToolDisplayStatus.HOVERNODE && node.getDistance(UI.getCursor().x, UI.getCursor().y) < 10) {
+		if((UI.getUI().getToolDisplayStatus() == ToolDisplayStatus.HOVERNODE || UI.getUI().getToolDisplayStatus() == ToolDisplayStatus.HOVERNODEPOLYGON) && node.getDistance(UI.getCursor().x, UI.getCursor().y) < 10) {
 		shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1);	
 		} else {
 		
@@ -296,7 +302,7 @@ public class RenderShapes {
 		
 		float[] vertices = polygon.getVertices();
 
-		if (UI.getUI().getToolDisplayStatus() == ToolDisplayStatus.HOVERPOLYGON && polygon.isPointInside(new Vector2(UI.getCursor().x, UI.getCursor().y))) {
+		if ((UI.getUI().getToolDisplayStatus() == ToolDisplayStatus.HOVERPOLYGON || UI.getUI().getToolDisplayStatus() == ToolDisplayStatus.HOVERNODEPOLYGON) && polygon.isPointInside(new Vector2(UI.getCursor().x, UI.getCursor().y))) {
 			
 		shapeRenderer.setColor(1, 0.3f, 0.3f, 1);	
 			

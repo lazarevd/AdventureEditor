@@ -34,6 +34,7 @@ public class SetDistance implements Tool  {
 
     @Override
     public void prepare() {
+        Gdx.app.log("Prepare ", dialogBuffer);
         toolStat = ToolStatus.SELECTING;
         UI.getUI().NODE = true;
         UI.getUI().setToolDisplayStatus(ToolDisplayStatus.HOVERNODE);
@@ -41,18 +42,19 @@ public class SetDistance implements Tool  {
 
     @Override
     public void select() {
-
+        Gdx.app.log("Select ", dialogBuffer);
         Vector2 inputXY = new Vector2(UI.getCursor().x,UI.getCursor().y);
         if(setSelectedNode(inputXY)) {
             UI.getUI().showNodeDistanceDialog(workNode, this);
             toolStat = ToolStatus.PROCESSING;
+            UI.getUI().setToolDisplayStatus(ToolDisplayStatus.NORMAL);
         }
     }
 
     @Override
     public void process() {
         if(workNode != null) {
-            Gdx.app.log("Dialog ", dialogBuffer);
+            Gdx.app.log("Process ", dialogBuffer);
             if(finishEnter) {
                 float dist = 0;
                 try {
@@ -62,7 +64,7 @@ public class SetDistance implements Tool  {
                 } catch (NullPointerException npe ) {
                     toolStat = ToolStatus.FINISHED;
                 }
-                workNode.setDistance(dist);
+                workNode.setCamDistance(dist);
                 toolStat = ToolStatus.FINISHED;
             }
         } else {
@@ -72,6 +74,7 @@ public class SetDistance implements Tool  {
 
     @Override
     public void finish() {
+        Gdx.app.log("Finish ", "SetDist");
         UI.getUI().setToolDisplayStatus(ToolDisplayStatus.NORMAL);
         UI.getUI().hideNodeDistanceDialog();
     }

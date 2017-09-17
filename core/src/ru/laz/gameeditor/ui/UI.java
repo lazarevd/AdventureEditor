@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
 import java.util.Map.Entry;
@@ -35,6 +34,7 @@ import ru.laz.gameeditor.ui.tools.ConnectPolygons;
 import ru.laz.gameeditor.ui.tools.ConnectPolygons2;
 import ru.laz.gameeditor.ui.tools.DeleteEdge;
 import ru.laz.gameeditor.ui.tools.DeleteNode;
+import ru.laz.gameeditor.ui.tools.MoveNodePoly;
 import ru.laz.gameeditor.ui.tools.SetDistance;
 import ru.laz.gameeditor.ui.tools.Tool;
 import ru.laz.gameeditor.ui.tools.ToolBox;
@@ -42,8 +42,8 @@ import ru.laz.gameeditor.world.World;
 
 public class UI {
 
-	public final static int SCREENW = 1440;
-	public final static int SCREENH = 480;
+	public final static int SCREENW = 1260;
+	public final static int SCREENH = 540;
 	
 	
 	private TextButtonStyle textButtonStyle;
@@ -58,12 +58,14 @@ public class UI {
 	private static UI ui; //singletone
 	
 	public boolean NODE, POLY = true;
-	public boolean MOVEPOLY = false;
-	public static boolean drawBack = false;
+	public boolean MOVEPOLY = false; //Режимы в которых можно двигать ноды, в некоторых инструментах полезны, в некоторых нет
+	public boolean MOVENODE = false;
+
+	public static boolean drawBack = true;
 	
 	private ToolDisplayStatus toolDisplayStatus = ToolDisplayStatus.NORMAL;
 	
-	public enum ToolDisplayStatus {HOVERPOLYGON, HOVERPOE, HOVERNODE, HOVEREDGE, NORMAL};
+	public enum ToolDisplayStatus {HOVERNODEPOLYGON, HOVERPOLYGON, HOVERPOE, HOVERNODE, HOVEREDGE, NORMAL};
 
 	TextField textDialogField = null;
 	
@@ -84,8 +86,8 @@ public class UI {
 	private void fillUI() {
 		mainTable.setDebug(true);
 		
-		Button but1 = createButton("Node");
-		but1.addListener(new ChangeListener() {
+		Button node_mode = createButton("Node");
+		node_mode.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		        ToolBox.stopTool(curTool);
 		    	if (NODE) {
@@ -98,8 +100,8 @@ public class UI {
 		    }
 		});
 		
-		Button but2 = createButton("Poly");
-		but2.addListener(new ChangeListener() {
+		Button poly_mode = createButton("Poly");
+		poly_mode.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	ToolBox.stopTool(curTool);
 		        if (POLY) {
@@ -111,106 +113,82 @@ public class UI {
 		    }
 		});
 		
-		Button but13 = createButton("MovePoly");
-		but13.addListener(new ChangeListener() {
+		Button move_button = createButton("Move");
+		move_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	ToolBox.stopTool(curTool);
-		        if (MOVEPOLY) {
-		        	MOVEPOLY = false;
-			        toolDisplayStatus = ToolDisplayStatus.NORMAL;
-		        } else {
-		        	MOVEPOLY = true;
-			        toolDisplayStatus = ToolDisplayStatus.HOVERPOLYGON;
-		        }
+			        toolDisplayStatus = ToolDisplayStatus.HOVERNODEPOLYGON;
+				if(curTool == null) {
+					curTool = new MoveNodePoly();
+					curTool.prepare();
+				}
+
 
 		    }
 		});
 		
-		Button but3 = createButton("ConnPl1");
-		but3.addListener(new ChangeListener() {
+		Button conn_poly_button = createButton("ConnPl1");
+		conn_poly_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	POLY = true;
 		    	ToolBox.stopTool(curTool);
-		        if(curTool == null) {
 		        curTool = new ConnectPolygons();
 		        curTool.prepare();
-		        } else {
-		        	curTool = null;
-		        }
+
 		
 		     
 		    }
 		});
 		
-		Button but10 = createButton("ConnPl2");
-		but10.addListener(new ChangeListener() {
+		Button conn_poly2_button = createButton("ConnPl2");
+		conn_poly2_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	POLY = true;
 		    	ToolBox.stopTool(curTool);
-		        if(curTool == null) {
 		        curTool = new ConnectPolygons2();
 		        curTool.prepare();
-		        } else {
-		        	curTool = null;
-		        }
 		
 		     
 		    }
 		});
 		
 		
-		Button but4 = createButton("DelNode");
-		but4.addListener(new ChangeListener() {
+		Button del_node_button = createButton("DelNode");
+		del_node_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	NODE = true;
 		    	ToolBox.stopTool(curTool);
-		        if(curTool == null) {
 		        curTool = new DeleteNode();
 		        curTool.prepare();
-		        } else {
-		        	curTool = null;
-		        }
-		
-	
 		    }
 		});
 		
 		
-		Button but12 = createButton("DelEdge");
-		but12.addListener(new ChangeListener() {
+		Button del_edge_button = createButton("DelEdge");
+		del_edge_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	NODE = true;
 		    	ToolBox.stopTool(curTool);
-		        if(curTool == null) {
 		        curTool = new DeleteEdge();
 		        curTool.prepare();
-		        } else {
-		        	curTool = null;
-		        }
-		
-	
 		    }
 		});
 		
 		
-		Button but5 = createButton("ConnNod");
-		but5.addListener(new ChangeListener() {
+		Button con_node_button = createButton("ConnNod");
+		con_node_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	NODE = true;
 		    	ToolBox.stopTool(curTool);
-		    	if(curTool == null) {
 			        curTool = new ConnectNodes();
 			        curTool.prepare();
-			        } else {
-			        	curTool = null;
-			        }
 		
 		    }
 		});
 		
 		
-		Button but6 = createButton("DrawBack");
-		but6.addListener(new ChangeListener() {
+		Button draw_back_button = createButton("DrawBack");
+		draw_back_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	if (drawBack) {
 		    		drawBack = false;
@@ -222,25 +200,19 @@ public class UI {
 		});
 		
 
-		Button but7 = createButton("AddNode");
-		but7.addListener(new ChangeListener() {
+		Button add_node_button = createButton("AddNode");
+		add_node_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	NODE = true;
 		    	ToolBox.stopTool(curTool);
-		        if(curTool == null) {
 		        curTool = new AddNode();
 		        curTool.prepare();
-		        } else {
-		        	curTool = null;
-		        }
-		
-	
 		    }
 		});
 		
 		
-		Button but11 = createButton("AddPoly");
-		but11.addListener(new ChangeListener() {
+		Button add_poly_button = createButton("AddPoly");
+		add_poly_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	NODE = true;
 		    	ToolBox.stopTool(curTool);
@@ -255,8 +227,8 @@ public class UI {
 		    }
 		});
 		
-		Button but8 = createButton("Save gr");
-		but8.addListener(new ChangeListener() {
+		Button save_graph_button = createButton("Save gr");
+		save_graph_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	
 		    Json json = new Json();
@@ -269,8 +241,8 @@ public class UI {
 		    }
 		});
 		
-		Button but9 = createButton("Load gr");
-		but9.addListener(new ChangeListener() {
+		Button load_graph_button = createButton("Load gr");
+		load_graph_button.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	
 		    	FileHandle file = Gdx.files.internal("source.graph");
@@ -291,8 +263,8 @@ public class UI {
 		});
 
 
-		Button but14 = createButton("Set far");
-		but14.addListener(new ChangeListener() {
+		Button set_far_button = createButton("Set far");
+		set_far_button.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				NODE = true;
 				ToolBox.stopTool(curTool);
@@ -309,33 +281,33 @@ public class UI {
 	
 		
 		
-        mainTable.add(but1).maxWidth(60);
+        mainTable.add(node_mode).maxWidth(60);
         mainTable.row();
-        mainTable.add(but2).maxWidth(60);
+        mainTable.add(poly_mode).maxWidth(60);
         mainTable.row();
-        mainTable.add(but13).maxWidth(60);
+        mainTable.add(move_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but7).maxWidth(60);
+        mainTable.add(add_node_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but11).maxWidth(60);
+        mainTable.add(add_poly_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but3).maxWidth(60);
+        mainTable.add(conn_poly_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but10).maxWidth(60);
+        mainTable.add(conn_poly2_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but4).maxWidth(60);
+        mainTable.add(del_node_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but12).maxWidth(60);
+        mainTable.add(del_edge_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but5).maxWidth(60);
+        mainTable.add(con_node_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but6).maxWidth(60);
+        mainTable.add(draw_back_button).maxWidth(60);
 		mainTable.row();
-		mainTable.add(but14).maxWidth(60);
+		mainTable.add(set_far_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but8).maxWidth(60);
+        mainTable.add(save_graph_button).maxWidth(60);
         mainTable.row();
-        mainTable.add(but9).maxWidth(60);
+        mainTable.add(load_graph_button).maxWidth(60);
 
         
 	}
@@ -375,125 +347,23 @@ public class UI {
 
 	
 	public void act() {
-		if (ToolBox.processTool(curTool)) {//Если ToolBox вернул true, значит инструмент завершил работу и его можну удалить
-			curTool.finish();
+		if (ToolBox.processTool(curTool)) {//Если ToolBox вернул true, значит инструмент завершил работу и его можно удалить
 			curTool = null;
+			toolDisplayStatus = ToolDisplayStatus.NORMAL;
 		}
 		drawObjects();
 		RenderShapes.drawPoint(UI.getCursor(), 3, Colour.WHITE);
-		movePolygonVertex();
-		moveNode();
-		
 	}
 	
 	
-	public void movePolygonVertex() {
 
-		Vector2 touchPos = new Vector2();
-	      touchPos.set(Gdx.input.getX(), Gdx.input.getY());
-	      if(Gdx.input.isTouched() && MOVEPOLY) {  
-	      
-	      if (POLY == true)  {
-	    	  	  Array<Polygon4> polys = new Array<Polygon4>();
-	    	  	  
-	    	  	  for (Entry<String, Polygon4> entry : world.getGraph().getPolygons().entrySet()) {
-	    	  		  polys.add(entry.getValue());
-	    	  	  }  	  
-	    	  	  Polygon4 curPolygon, movePolygon;
-				  int moveVertex;  //IDs of vertex in poly
-			      int curVertex;
-			      float curDistance;
-			      float distance;
-			      float nodDistance;
-			           
-			      if (polys.size > 0 ) {
-			      
-			      curPolygon = polys.get(polys.size-1);// Test only
-			      movePolygon = curPolygon;
-			      moveVertex = 1;
-			      nodDistance = curPolygon.getDistanceToVertex(1, UI.getCursor().x, UI.getCursor().y);
-			      
-			      curDistance = 0;
-			      for (Polygon4 pol : polys) {//Loop polys
-				      
-			    	  curVertex = 1;
-				      curDistance = pol.getDistanceToVertex(1, UI.getCursor().x, UI.getCursor().y);
-
-			    	  
-			    	  for(int i = 1; i <= 4; i++) {
-			    		  distance = pol.getDistanceToVertex(i, UI.getCursor().x, UI.getCursor().y);
-			    		  if(distance < curDistance) {
-		    			  curVertex = i;
-			    			  curDistance = distance;
-			    		  }				    		    
-			    	  }
-	    		  if(curDistance < nodDistance) {
-		    			  curPolygon = pol;
-			    		  nodDistance = curDistance;
-			    		  moveVertex = curVertex;
-
-			    		  }
-	    		  movePolygon = curPolygon;
-			      }
-	     
-			      if (movePolygon.getDistanceToVertex(moveVertex, UI.getCursor().x, UI.getCursor().y) < 20) {
-			    	  movePolygon.setVertexXY(moveVertex,UI.getCursor().x, UI.getCursor().y);
-					  RenderShapes.drawPoint(UI.getCursor(), 5, Colour.RED);
-			      }
-}
- 
-	      }
-            }
-		
-	}
-	
-
-	
-	public void moveNode() {
-		 if(Gdx.input.isTouched()) {
-		      Vector2 touchPos = new Vector2();
-		      touchPos.set(Gdx.input.getX(), Gdx.input.getY());
-		      if (NODE == true)    {
-		   Node moveNode;
-		   Array<Node> nodes = new Array<Node>();
-				   
-			for (Entry<String,Node> entry : world.getGraph().getNodes().entrySet()) {
-				nodes.add(entry.getValue());
-			}
-		   
-		   
-		   
-		   
-		   
-		   if (nodes.size > 0) {
-		      moveNode = nodes.get(nodes.size-1);
-		      for (Node nod : nodes) {
-		    	  if (nod.getDistance(touchPos.x, UI.getCursor().y) < moveNode.getDistance(UI.getCursor().x, UI.getCursor().y)) {
-		    		  moveNode = nod;
-		    	  }
-		      }
-		      			      if (moveNode.getDistance(UI.getCursor().x, UI.getCursor().y) < 20) {
-		    	  moveNode.setX(UI.getCursor().x);
-		    	  moveNode.setY(UI.getCursor().y);
-		      }
-		      
-		      }
-		      
-		      }
-		      
-		      
-
-		      
-		      
-	   }
-	}
-	
 
 
 	public boolean showNodeDistanceDialog(Node node, final SetDistance setDistTool) {
 		Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 		textDialogField = new TextField("",skin);
 		stage.addActor(textDialogField);
+		textDialogField.setText(node.getCamDistance()+"");
 		textDialogField.setTextFieldListener(new TextField.TextFieldListener() {
 			@Override
 			public void keyTyped(TextField textField, char ch) {

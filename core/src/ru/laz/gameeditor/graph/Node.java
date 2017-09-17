@@ -17,7 +17,7 @@ public class Node {
 	protected NodeType nodeType;
 	private transient boolean start, finish = false;
 	private float x, y;
-	private float distance;
+	private float camDistance;
 	private transient String parentNode;
 	private transient Array<String> neighbours;
 	private transient int G, H; //G - from start cost, H - to finish heuristic cost.
@@ -401,12 +401,12 @@ public class Node {
 
 
 
-	public void setDistance(float distance) {
-		this.distance = distance;
+	public void setCamDistance(float distance) {
+		this.camDistance = distance;
 	}
 
-	public float getDistance() {
-		return distance;
+	public float getCamDistance() {
+		return camDistance;
 	}
 	
 	
