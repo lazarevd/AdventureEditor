@@ -66,7 +66,7 @@ public class SetDistance implements Tool  {
                 } catch (NullPointerException npe ) {
                     toolStat = ToolStatus.FINISHED;
                 }
-                workNode.setCamDistance(dist);
+                workNode.setRenderScale(dist);
                 prepare();
             }
         } else {

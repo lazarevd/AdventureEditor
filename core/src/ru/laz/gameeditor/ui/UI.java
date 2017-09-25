@@ -363,7 +363,7 @@ public class UI {
 		Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 		textDialogField = new TextField("",skin);
 		stage.addActor(textDialogField);
-		textDialogField.setText(node.getCamDistance()+"");
+		textDialogField.setText(node.getRenderScale()+"");
 		textDialogField.setTextFieldListener(new TextField.TextFieldListener() {
 			@Override
 			public void keyTyped(TextField textField, char ch) {

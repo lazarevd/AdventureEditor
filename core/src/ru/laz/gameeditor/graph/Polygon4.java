@@ -19,6 +19,7 @@ public class Polygon4 extends Polygon {
 	
 	private transient Array<String> pointsOnEdges;
 	public enum DrawStat {NORMAL, SELECTED, HIGHLIGHT};
+	private float camDistance = 0.0f;
 	public transient DrawStat drawStat;
 	
 	
@@ -46,9 +47,15 @@ public class Polygon4 extends Polygon {
 		} else throw new IllegalArgumentException("polygons must contain only 4 points.");
 
 	}
-	
-	
 
+
+	public float getCamDistance() {
+		return camDistance;
+	}
+
+	public void setCamDistance(float camDistance) {
+		this.camDistance = camDistance;
+	}
 	
 	
 	public String getThisId() {
