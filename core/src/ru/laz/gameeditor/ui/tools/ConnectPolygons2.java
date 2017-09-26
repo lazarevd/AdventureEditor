@@ -1,18 +1,17 @@
 package ru.laz.gameeditor.ui.tools;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
 import ru.laz.gameeditor.graph.Graph;
 import ru.laz.gameeditor.graph.Node;
-import ru.laz.gameeditor.graph.PointOnEdge;
 import ru.laz.gameeditor.graph.Polygon4;
 import ru.laz.gameeditor.render.RenderShapes;
 import ru.laz.gameeditor.render.RenderShapes.Colour;
 import ru.laz.gameeditor.ui.UI;
 import ru.laz.gameeditor.ui.UI.ToolDisplayStatus;
 import ru.laz.gameeditor.world.World;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 public class ConnectPolygons2 implements Tool {
 	
@@ -87,8 +86,8 @@ public class ConnectPolygons2 implements Tool {
 		n2Poes.add(n2Poe);
 		n2Poes.add(n2Poe);
 		
-		World.getWorld().getGraph().addNode(Graph.getNewNodeName(), new Node(n1Poes));
-		World.getWorld().getGraph().addNode(Graph.getNewNodeName(), new Node(n2Poes));
+		World.getWorld().getGraph().addNode(Graph.getNewNodeName(), new Node(n1Poes, selectedPolygons.get(0).getRenderScale()));
+		World.getWorld().getGraph().addNode(Graph.getNewNodeName(), new Node(n2Poes, selectedPolygons.get(1).getRenderScale()));
 		
 		this.toolStat = ToolStatus.FINISHED;
 		}

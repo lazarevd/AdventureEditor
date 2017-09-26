@@ -1,18 +1,17 @@
 package ru.laz.gameeditor.ui.tools;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
 import ru.laz.gameeditor.graph.Graph;
 import ru.laz.gameeditor.graph.Node;
-import ru.laz.gameeditor.graph.PointOnEdge;
 import ru.laz.gameeditor.graph.Polygon4;
 import ru.laz.gameeditor.render.RenderShapes;
 import ru.laz.gameeditor.render.RenderShapes.Colour;
 import ru.laz.gameeditor.ui.UI;
 import ru.laz.gameeditor.ui.UI.ToolDisplayStatus;
 import ru.laz.gameeditor.world.World;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 public class ConnectPolygons implements Tool {
 	
@@ -79,7 +78,7 @@ public class ConnectPolygons implements Tool {
 		
 		pointsOnEdges.add(selectedPolygons.get(0).addPointOnClosestEdge(selectedCoords.get(0).x, selectedCoords.get(0).y));//На основании ранее отселекченных координат добавляем
 		pointsOnEdges.add(selectedPolygons.get(1).addPointOnClosestEdge(selectedCoords.get(1).x, selectedCoords.get(1).y));//точки на ребра (poe) на отселекченные полигоны. сразу добавлем их в список poe
-		World.getWorld().getGraph().addNode(Graph.getNewNodeName(), new Node(pointsOnEdges));
+		World.getWorld().getGraph().addNode(Graph.getNewNodeName(), new Node(pointsOnEdges, selectedPolygons.get(0).getRenderScale()));
 		
 		this.toolStat = ToolStatus.FINISHED;
 		}

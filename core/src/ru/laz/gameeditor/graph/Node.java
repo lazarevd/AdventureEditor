@@ -17,7 +17,7 @@ public class Node {
 	protected NodeType nodeType;
 	private transient boolean start, finish = false;
 	private float x, y;
-	private float renderScale = 0.0f;
+	private float renderScale;
 	private transient String parentNode;
 	private transient Array<String> neighbours;
 	private transient int G, H; //G - from start cost, H - to finish heuristic cost.
@@ -32,10 +32,11 @@ public class Node {
 		this.neighbours = new Array<String>();
 	}//empty constructor for serialization
 	
-	public Node(float x2, float y2) {
+	public Node(float x2, float y2, float renderScale) {
 		nodeType = NodeType.STANDART;
 		this.x = x2;
-		this.y = y2;	
+		this.y = y2;
+		this.renderScale = renderScale;
 		this.colour = Colour.YELLOW;
 		this.neighbours = new Array<String>();
 		this.parentNode = null; 
@@ -43,8 +44,8 @@ public class Node {
 	}
 	
 	
-	public Node(float x2, float y2, int sf) {
-		this(x2, y2);
+	public Node(float x2, float y2, float renderScale, int sf) {
+		this(x2, y2, renderScale);
 		
 		switch (sf) {
 		case 1: start = true;
@@ -55,8 +56,8 @@ public class Node {
 	}
 	
 	
-	public Node(Array<String> poeList) {
-		this(100,100);
+	public Node(Array<String> poeList, float renderScale) {
+		this(100,100, renderScale);
 		this.poeList = poeList;
 		nodeType = NodeType.POE;
 		setPOEPosition();

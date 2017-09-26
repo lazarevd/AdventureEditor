@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import ru.laz.gameeditor.graph.Graph;
 import ru.laz.gameeditor.graph.Node;
 import ru.laz.gameeditor.ui.UI;
-import ru.laz.gameeditor.ui.tools.Tool.ToolStatus;
 import ru.laz.gameeditor.world.World;
 
 public class AddNode implements Tool {
@@ -53,7 +52,7 @@ public class AddNode implements Tool {
 	public void process() {
 		
 		if(this.toolStat != ToolStatus.FINISHED && xy.x > 50) {
-		Node node = new Node((int)xy.x, (int)xy.y);
+		Node node = new Node((int)xy.x, (int)xy.y, 1.0f);
 		
 		
 		World.getWorld().getGraph().addNode(Graph.getNewNodeName(), node);

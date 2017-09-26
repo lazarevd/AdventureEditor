@@ -53,7 +53,7 @@ public class Edge {
 		
 
 		
-		Polygon4 square = new Polygon4(getEdgeSquare());
+		Polygon4 square = new Polygon4(getEdgeSquare(), 0);
 
 		res = square.isPointInside(xy);
 		

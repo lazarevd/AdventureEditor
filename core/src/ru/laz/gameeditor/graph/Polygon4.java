@@ -19,20 +19,23 @@ public class Polygon4 extends Polygon {
 	
 	private transient Array<String> pointsOnEdges;
 	public enum DrawStat {NORMAL, SELECTED, HIGHLIGHT};
-	private float camDistance = 0.0f;
+	private float renderScale;
 	public transient DrawStat drawStat;
-	
-	
+
+
 	public Polygon4() {
-		super();
 		pointsOnEdges = new Array<String>();
 		drawStat = DrawStat.NORMAL;
 	}
 	
+	public Polygon4(float renderScale) {
+		super();
+	}
 	
 	
-	public Polygon4(float[] vertices) {
-		this();
+	
+	public Polygon4(float[] vertices, float renderScale) {
+		this(renderScale);
 		this.setVertices(vertices);
 	}
 	
@@ -49,12 +52,12 @@ public class Polygon4 extends Polygon {
 	}
 
 
-	public float getCamDistance() {
-		return camDistance;
+	public float getRenderScale() {
+		return renderScale;
 	}
 
-	public void setCamDistance(float camDistance) {
-		this.camDistance = camDistance;
+	public void setRenderScale(float renderScale) {
+		this.renderScale = renderScale;
 	}
 	
 	

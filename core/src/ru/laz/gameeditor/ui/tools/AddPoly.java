@@ -1,14 +1,12 @@
 package ru.laz.gameeditor.ui.tools;
 
-import ru.laz.gameeditor.graph.Graph;
-import ru.laz.gameeditor.graph.Node;
-import ru.laz.gameeditor.graph.Polygon4;
-import ru.laz.gameeditor.ui.UI;
-import ru.laz.gameeditor.ui.tools.Tool.ToolStatus;
-import ru.laz.gameeditor.world.World;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+
+import ru.laz.gameeditor.graph.Graph;
+import ru.laz.gameeditor.graph.Polygon4;
+import ru.laz.gameeditor.ui.UI;
+import ru.laz.gameeditor.world.World;
 
 public class AddPoly implements Tool {
 
@@ -58,7 +56,7 @@ public class AddPoly implements Tool {
 		float[] polyFloat = {xy.x-30,xy.y-30,xy.x+30,xy.y-30,xy.x+30,xy.y+30,xy.x-30,xy.y+30};
 		
 		
-		Polygon4 poly = new Polygon4(polyFloat);
+		Polygon4 poly = new Polygon4(polyFloat, 1.0f);
 		
 		World.getWorld().getGraph().addPolygon(Graph.getNewPolyName(), poly);
 		
